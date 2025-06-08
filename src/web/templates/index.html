@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="{{ 'zh-CN' if language == 'CN' else 'en' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ texts.page_title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+</head>
+<body>
+    <div class="container">
+        <!-- 头部区域 -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    {{ texts.app_title }}
+                </h1>
+                <div class="header-controls">
+                    <div class="connection-status" id="connectionStatus">
+                        <span class="status-indicator" id="statusIndicator"></span>
+                        <span class="status-text" id="statusText">
+                            {{ texts.connecting }}
+                        </span>
+                    </div>
+                    <div class="language-switch">
+                        <a href="?lang=CN" class="{{ 'active' if language == 'CN' else '' }}">中文</a>
+                        <a href="?lang=EN" class="{{ 'active' if language == 'EN' else '' }}">English</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <!-- 等待状态 -->
+            <div class="waiting-state" id="waitingState">
+                <div class="waiting-content">
+                    <div class="waiting-icon">⏳</div>
+                    <h2>{{ texts.waiting_title }}</h2>
+                    <p>{{ texts.waiting_description }}</p>
+                </div>
+            </div>
+
+            <!-- 反馈收集界面 -->
+            <div class="feedback-form" id="feedbackForm" style="display: none;">
+                <!-- 文本输入区域 -->
+                <div class="text-input-section">
+                    <div class="section-header">
+                        <span class="section-icon">📝</span>
+                        <label class="section-label">
+                            {{ texts.text_feedback_label }}
+                        </label>
+                    </div>
+                    <textarea 
+                        id="feedbackText" 
+                        class="feedback-textarea" 
+                        placeholder="{{ texts.text_feedback_placeholder }}"
+                        rows="8"
+                    ></textarea>
+                </div>
+
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="section-header">
+                        <span class="section-icon">🖼️</span>
+                        <label class="section-label">
+                            {{ texts.image_feedback_label }}
+                        </label>
+                    </div>
+                    
+                    <!-- 图片操作按钮 -->
+                    <div class="image-buttons">
+                        <button type="button" class="btn btn-image btn-select" id="selectImageBtn">
+                            {{ texts.select_image }}
+                        </button>
+                        <button type="button" class="btn btn-image btn-paste" id="pasteImageBtn">
+                            {{ texts.paste_image }}
+                        </button>
+                        <button type="button" class="btn btn-image btn-clear" id="clearImagesBtn">
+                            {{ texts.clear_images }}
+                        </button>
+                    </div>
+
+                    <!-- 图片预览区域 -->
+                    <div class="image-preview-container">
+                        <div class="image-preview" id="imagePreview">
+                            <div class="no-images-placeholder">
+                                {{ texts.no_images_selected }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
+                </div>
+
+                <!-- 设置区域 -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <span class="section-icon">⚙️</span>
+                        <label class="section-label">
+                            {{ texts.auto_append_label }}
+                        </label>
+                    </div>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="autoAppend" checked>
+                        <span class="checkmark"></span>
+                        {{ texts.auto_append_description }}
+                    </label>
+                </div>
+
+                <!-- 操作按钮区域 -->
+                <div class="action-buttons">
+                    <button type="button" class="btn btn-primary" id="submitBtn">
+                        {{ texts.submit_feedback }}
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">
+                        {{ texts.cancel }}
+                    </button>
+                </div>
+
+                <!-- 底部提示 -->
+                <div class="bottom-hints">
+                    <div class="shortcuts-hint">
+                        <span class="hint-icon">⌨️</span>
+                        {{ texts.shortcuts_hint }}
+                    </div>
+                    <div class="timeout-hint">
+                        <span class="hint-icon">⏰</span>
+                        {{ texts.timeout_hint }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 提交状态 -->
+            <div class="submit-status" id="submitStatus" style="display: none;">
+                <div class="status-content">
+                    <div class="status-icon" id="statusIcon">⏳</div>
+                    <h3 id="statusTitle">{{ texts.submitting }}</h3>
+                    <p id="statusMessage"></p>
+                </div>
+            </div>
+        </main>
+
+        <!-- 底部信息 -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>{{ texts.page_title }} v1.0.0</p>
+                <p>{{ texts.connections_label }}<span id="connectionCount">0</span></p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 通知容器 -->
+    <div class="notifications" id="notifications"></div>
+
+    <!-- JavaScript -->
+    <script>
+        // 全局配置
+        window.APP_CONFIG = {
+            language: '{{ language }}',
+            maxFileSize: {{ config.max_file_size }},
+            allowedExtensions: {{ config.allowed_extensions | tojson }},
+            wsHeartbeatInterval: {{ config.ws_heartbeat_interval }},
+            texts: {{ texts | tojson }}
+        };
+    </script>
+    <script src="/static/js/websocket.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html> 

@@ -1,0 +1,15 @@
+{
+    "mcpServers": {
+        "feedback-collector-web": {
+            "command": "/Users/weirdowaoo/anaconda3/envs/feedback_collector_web/bin/python",
+            "args": [
+                "/Users/weirdowaoo/Documents/CursorProjects/feedback_collector_web/mcp_server.py"
+            ],
+            "env": {
+                "WEB_HOST": "0.0.0.0",
+                "WEB_PORT": "9999",
+                "FEEDBACK_TIMEOUT": "600"
+            }
+        }
+    }
+}
